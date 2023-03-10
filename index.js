@@ -7,6 +7,16 @@ app.use(express.json())
 app.use((express.urlencoded({extended: true})))
 app.use(cors())
 
+
+const verify = (req, res, next) =>{
+    const {token} = req.body;
+    if (token === topsecrete ){
+      next()
+    }else(
+        res.json({data: 'Access denied. Stay away!'})
+    )
+}
+
 const send_verus = (address, amount) =>{
 let ct =''
 let ft =''
@@ -48,7 +58,7 @@ return transactionstatus;
 }
 
 
-app.post('/pay_verus_craft', (req, res) =>{
+app.post('/pay_verus_craft',verify, (req, res) =>{
     const {amount, address} = req.body;
     console.log(amount)
     if (amount == undefined || address == undefined){
